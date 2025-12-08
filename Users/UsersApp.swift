@@ -11,7 +11,10 @@ import SwiftUI
 struct UsersApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            NavigationStack {
+                ContentView()
+            }.background(Color(uiColor: .black))
+            .ignoresSafeArea()
         }
     }
 }
