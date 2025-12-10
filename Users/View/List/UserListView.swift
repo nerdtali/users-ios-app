@@ -13,12 +13,14 @@ struct UserListView: View {
     var body: some View {
         NavigationStack {
             List {
-                LazyVStack(alignment: .leading, spacing: 8) {
-                    ForEach(viewModel.userList, id: \.id) { user in
+                ForEach(viewModel.userList, id: \.id) { user in
+                    NavigationLink {
+                        UserDetailView(user: user)
+                    } label: {
                         HStack(spacing: 12) {
                             Text(user.firstName)
                                 .font(.title.weight(.light))
-                                .padding(.vertical,2)
+                                .padding(.vertical, 2)
                             
                             Spacer()
                             
@@ -28,10 +30,8 @@ struct UserListView: View {
                         }
                         .padding(.vertical, 3)
                         .padding(.horizontal, 16)
-                       // .frame(maxWidth: .infinity, alignment: .leading)
                     }
                 }
-                .padding(.top, 8)
             }
             .navigationTitle("Usuarios")
             .task {
@@ -42,7 +42,6 @@ struct UserListView: View {
                 }
             }
         }
-       
     }
     
     private func color(for status: String) -> Color {

@@ -13,8 +13,7 @@ struct UsersApp: App {
         WindowGroup {
             NavigationStack {
                 ContentView()
-            }.background(Color(uiColor: .black))
-            .ignoresSafeArea()
+            }
         }
     }
 }

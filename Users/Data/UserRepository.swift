@@ -20,4 +20,8 @@ struct UserRepository: UserRepositoryProtocol {
     func getUsers() async throws -> [User] {
         return try await userDataSource.getAllUsers()
     }
+    
+    func getUserById(id: UUID) async throws -> UserDetail {
+        return try await userDataSource.getUser(id: id)
+    }
 }

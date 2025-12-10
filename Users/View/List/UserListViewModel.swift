@@ -21,7 +21,7 @@ final class UserListViewModel {
         do {
             userList = try await getUserListUseCase.execute()
             
-            do {
+          /*  do {
                 let data = try JSONEncoder().encode(userList)
                 if let jsonString = String(data: data, encoding: .utf8) {
                     print("Raw JSON response UserListViewModel:")
@@ -29,7 +29,7 @@ final class UserListViewModel {
                 }
             } catch {
                 print("Failed to encode users to JSON for logging: \(error)")
-            }
+            }*/
         }catch{
             print(error)
         }

@@ -17,5 +17,4 @@ struct GetUserListUseCase {
     func execute() async throws -> [User] {
         return try await userRepository.getUsers()
     }
-    
 }

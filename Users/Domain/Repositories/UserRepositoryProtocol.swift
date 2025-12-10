@@ -9,4 +9,5 @@ import Foundation
 
 protocol UserRepositoryProtocol {
     func getUsers() async throws -> [User]
+    func getUserById(id: UUID) async throws -> UserDetail
 }
