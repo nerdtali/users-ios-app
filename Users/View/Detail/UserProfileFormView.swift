@@ -7,14 +7,18 @@
 
 import SwiftUI
 
-struct UserProfileForm: View {
+struct UserProfileFormView: View {
     @State private var username: String = ""
     @State private var email: String = ""
     @State private var nickname: String = ""
     @State private var birthday: Date = .now
     @State private var status: String = ""
     @State private var gender: String = ""
-    @State private var isEditing: Bool = false
+    
+    @Binding private var isEditing: Bool
+    
+    let defaultStatus = ["ACTIVE", "INACTIVE", "BANNED"]
+    let defaultGender = ["MALE", "FEMALE", "OTHER"]
 
     init(
         username: String = "",
@@ -22,7 +26,8 @@ struct UserProfileForm: View {
         nickname: String = "",
         birthday: Date = .now,
         status: String = "",
-        gender: String =  ""
+        gender: String =  "",
+        isEditing: Binding<Bool>
     ) {
         _username = State(initialValue: username)
         _email = State(initialValue: email)
@@ -30,6 +35,7 @@ struct UserProfileForm: View {
         _birthday = State(initialValue: birthday)
         _status = State(initialValue: status)
         _gender = State(initialValue: gender)
+        _isEditing = isEditing
     }
 
     var body: some View {
@@ -55,43 +61,80 @@ struct UserProfileForm: View {
                         .multilineTextAlignment(.trailing)
                 }
                 
-                LabeledContent("Estado") {
-                    TextField("Status", text: $status)
-                        .multilineTextAlignment(.trailing)
-                        .foregroundColor(Color.green)
+                Picker("Estado", selection: $status) {
+                    ForEach(defaultStatus, id: \.self) { status in
+                        Text(status)
+                            .tag(status)
+                    }
                 }
 
                 DatePicker("Fecha de Nacimiento",
                            selection: $birthday,
                            displayedComponents: .date)
                 
-                LabeledContent("Género") {
-                    TextField("Gender", text: $gender)
-                        .multilineTextAlignment(.trailing)
+                Picker("Genero", selection: $gender) {
+                    ForEach(defaultGender, id: \.self) { gender in
+                        Text(gender)
+                            .tag(gender)
+                    }
                 }
             }
 
-            Section {
-                Button("Save Profile") {
-                    // Implement save functionality here
-                    print("Saving profile for: \(username)")
+            if isEditing {
+                Section {
+                    Button("Actualizar datos") {
+                        // Implementa guardado aquí (llamada a ViewModel/UseCase).
+                        // Al terminar, puedes salir del modo edición:
+                        isEditing = false
+                        print("Saving profile for: \(username)")
+                    }.frame(maxWidth: .infinity, alignment: .center)
+                    
+                    
+                }
+                
+                Section {
+                    Button("Eliminar") {
+                        // Implementa guardado aquí (llamada a ViewModel/UseCase).
+                        // Al terminar, puedes salir del modo edición:
+                        isEditing = false
+                        print("Deleting profile for: \(username)")
+                    }.frame(maxWidth: .infinity, alignment: .center)
+                        .foregroundColor(Color.red)
                 }
             }
+            
+            
+        }
+        .disabled(!isEditing)
+        
+       
+    }
+    
+    private func color(for status: String) -> Color {
+        switch status.uppercased() {
+        case "ACTIVE":
+            return .green
+        case "INACTIVE":
+            return .red
+        default:
+            return .gray
         }
     }
+
 }
 
 struct UserProfileForm_Previews: PreviewProvider {
     static var previews: some View {
         let sampleDate = Calendar.current.date(from: DateComponents(year: 1990, month: 12, day: 12)) ?? .now
 
-        return UserProfileForm(
+        return UserProfileFormView(
             username: "userNames",
             email: "a@a.cl",
             nickname: "nick",
             birthday: sampleDate,
             status: "ACTIVE",
-            gender: "MALE"
+            gender: "MALE",
+            isEditing: .constant(true)
         )
     }
 }

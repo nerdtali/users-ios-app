@@ -12,6 +12,7 @@ struct UserDetailView: View {
     
     @Environment(\.dismiss) private var dismiss
     @State private var viewModel = UserDetailViewModel()
+    @State private var isEditing: Bool = false
     
     private let user: User
     
@@ -35,14 +36,15 @@ struct UserDetailView: View {
                 .frame(maxWidth: .infinity, alignment: .center)
                 
                 if let detail = viewModel.userDetail {
-                    UserProfileForm(
+                    UserProfileFormView(
                         username: detail.username,
                         email: detail.email,
                         nickname: detail.nickname,
                         birthday: detail.birthDate,
                         status: detail.status,
-                        gender: detail.gender
-                    ).disabled(true)
+                        gender: detail.gender,
+                        isEditing: $isEditing
+                    )
                 } else {
                     ProgressView()
                         .padding()
@@ -50,8 +52,8 @@ struct UserDetailView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Editar") {
-                        // Acción de edición
+                    Button(isEditing ? "Cancelar" : "Editar") {
+                        isEditing.toggle()
                     }
                 }
             }
