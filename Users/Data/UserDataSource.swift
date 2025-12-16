@@ -42,7 +42,7 @@ struct UserDataSource: UserDataSourceProtocol {
         }
         
         do {
-            return try JSONDecoder().decode(UserDetail.self, from: data)
+            return try Decoders.user.decode(UserDetail.self, from: data)
         }catch{
             throw ServiceError.invalidData
         }

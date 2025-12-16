@@ -16,7 +16,7 @@ struct UserDetail: Identifiable, Codable {
     let lastName: String
     let nickname: String
     let gender: String
-    let birthDate: String
+    let birthDate: Date
     let avatarURL: URL?
     
 

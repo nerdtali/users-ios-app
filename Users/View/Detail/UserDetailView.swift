@@ -20,53 +20,62 @@ struct UserDetailView: View {
     }
     
     var body: some View {
-        ZStack(alignment: .top) {
-            VStack(spacing: 0){
-                HStack (alignment: .top){
-                    
+        NavigationStack {
+            VStack {
+                ProfilePicture(
+                    url: viewModel.userDetail?.avatarURL
+                )
+                HStack(spacing: 8) {
+                    Text(viewModel.userDetail?.firstName ?? "FirstName")
+                        .font(.largeTitle).bold().foregroundColor(Color.white)
+                    Text(viewModel.userDetail?.lastName ?? "LastName")
+                        .font(.largeTitle).bold()
+                        .foregroundColor(Color.white)
                 }
-                .frame(maxWidth: .infinity)
-                .frame(height: 100)
-                .padding(.horizontal)
-                ZStack{
-                    
-                    RoundedRectangle(cornerRadius: 20)
-                        .fill(Color.white)
-                  
-                    VStack{
-                        ProfilePicture(
-                            url: viewModel.userDetail?.avatarURL
-                        )
-                        HStack(spacing: 8) {
-                            Text(viewModel.userDetail?.firstName ?? "FirstName")
-                                .font(.largeTitle).bold()
-                            Text(viewModel.userDetail?.lastName ?? "LastName")
-                                .font(.largeTitle).bold()
-                        }
-                        .frame(maxWidth: .infinity, alignment: .center)
-                    }.offset(y: -250)
+                .frame(maxWidth: .infinity, alignment: .center)
+                
+                if let detail = viewModel.userDetail {
+                    UserProfileForm(
+                        username: detail.username,
+                        email: detail.email,
+                        nickname: detail.nickname,
+                        birthday: detail.birthDate,
+                        status: detail.status,
+                        gender: detail.gender
+                    ).disabled(true)
+                } else {
+                    ProgressView()
+                        .padding()
                 }
-                .padding(15)
             }
-        }
-        .background(Color.teal)
-        .task {
-            do {
-                try await viewModel.fetchUserDetail(id: user.id)
-            } catch {
-                print(error)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Editar") {
+                        // Acción de edición
+                    }
+                }
+            }
+            .background(Color.teal)
+            .task {
+                do {
+                    try await viewModel.fetchUserDetail(id: user.id)
+                } catch {
+                    print(error)
+                }
             }
         }
     }
 }
 
 #Preview {
-    UserDetailView(
-        user: User(
-            id: UUID(uuidString: "b9c7f4e2-1a23-4bcd-9f01-23456789abcd") ?? UUID(),
-            firstName: "Ada",
-            avatarURL: URL(string: "https://avatar.iran.liara.run/public"),
-            status: "ACTIVE"
+    NavigationStack {
+        UserDetailView(
+            user: User(
+                id: UUID(uuidString: "b9c7f4e2-1a23-4bcd-9f01-23456789abcd") ?? UUID(),
+                firstName: "Ada",
+                avatarURL: URL(string: "https://avatar.iran.liara.run/public"),
+                status: "ACTIVE"
+            )
         )
-    )
+    }
 }
