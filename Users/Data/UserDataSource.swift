@@ -24,14 +24,14 @@ struct UserDataSource: UserDataSourceProtocol {
         
         do {
             return try JSONDecoder().decode([User].self, from: data)
-        }catch{
+        } catch {
             throw ServiceError.invalidData
         }
     }
     
-    func getUser(id: UUID) async throws-> UserDetail {
+    func getUser(userId: UUID) async throws-> UserDetail {
         
-        guard let url = URL(string: "http://localhost:8080/user/\(id)") else {
+        guard let url = URL(string: "http://localhost:8080/user/\(userId)") else {
             throw ServiceError.invalidURL
         }
         
@@ -43,9 +43,28 @@ struct UserDataSource: UserDataSourceProtocol {
         
         do {
             return try Decoders.user.decode(UserDetail.self, from: data)
-        }catch{
+        } catch {
             throw ServiceError.invalidData
         }
+    }
+    
+    func deleteUser(userId: UUID) async throws {
+        
+        guard let url = URL(string: "http://localhost:8080/user/\(userId)") else {
+            throw ServiceError.invalidURL
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+       
+        let (_, response) = try await URLSession.shared.data(for: request)
+        
+        guard let response = response as? HTTPURLResponse, response.statusCode == 204 else {
+            throw ServiceError.invalidResponse
+        }
+        
+        print("Resource delete successfully!")
     }
 }
 

@@ -37,6 +37,7 @@ struct UserDetailView: View {
                 
                 if let detail = viewModel.userDetail {
                     UserProfileFormView(
+                        userId: detail.id,
                         firstName: detail.firstName,
                         lastName: detail.lastName,
                         username: detail.username,
@@ -83,3 +84,4 @@ struct UserDetailView: View {
         )
     }
 }
+

@@ -9,5 +9,6 @@ import Foundation
 
 protocol UserRepositoryProtocol {
     func getUsers() async throws -> [User]
-    func getUserById(id: UUID) async throws -> UserDetail
+    func getUserById(userId: UUID) async throws -> UserDetail
+    func deleteUserById(userId: UUID) async throws -> Void
 }

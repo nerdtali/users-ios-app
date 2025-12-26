@@ -10,5 +10,6 @@ import Foundation
 
 protocol UserDataSourceProtocol {
     func getAllUsers() async throws -> [User]
-    func getUser(id: UUID) async throws -> UserDetail
+    func getUser(userId: UUID) async throws -> UserDetail
+    func deleteUser(userId: UUID) async throws -> Void
 }

@@ -16,7 +16,7 @@ struct GetUserDetailUseCase {
     }
     
     func execute(id: UUID) async throws -> UserDetail {
-        return try await userRepository.getUserById(id: id)
+        return try await userRepository.getUserById(userId: id)
         
     }
 }

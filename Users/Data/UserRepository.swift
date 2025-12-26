@@ -21,7 +21,11 @@ struct UserRepository: UserRepositoryProtocol {
         return try await userDataSource.getAllUsers()
     }
     
-    func getUserById(id: UUID) async throws -> UserDetail {
-        return try await userDataSource.getUser(id: id)
+    func getUserById(userId: UUID) async throws -> UserDetail {
+        return try await userDataSource.getUser(userId: userId)
+    }
+    
+    func deleteUserById(userId: UUID) async throws {
+        try await userDataSource.deleteUser(userId: userId)
     }
 }
