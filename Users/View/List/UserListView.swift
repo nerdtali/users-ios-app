@@ -12,35 +12,46 @@ struct UserListView: View {
     
     var body: some View {
         NavigationStack {
-            List {
-                ForEach(viewModel.userList, id: \.id) { user in
-                    NavigationLink {
-                        UserDetailView(user: user)
-                    } label: {
-                        HStack(spacing: 12) {
-                            Text(user.firstName)
-                                .font(.title.weight(.light))
-                                .padding(.vertical, 2)
-                            
-                            Spacer()
-                            
-                            Image(systemName: "checkmark.circle")
-                                .foregroundColor(self.color(for: user.status))
-                                .font(.title.weight(.light))
+            VStack {
+                HStack {
+                    Text("Usuarios")
+                        .font(.title)
+                        .bold()
+                        .foregroundStyle(Color(.label))
+                    Spacer()
+                }.padding(20)
+                
+                List {
+                    ForEach(viewModel.userList, id: \.id) { user in
+                        NavigationLink {
+                            UserDetailView(user: user)
+                        } label: {
+                            HStack(spacing: 12) {
+                                Text(user.firstName)
+                                    .font(.title.weight(.light))
+                                    .padding(.vertical, 2)
+                                
+                                Spacer()
+                                
+                                Image(systemName: "checkmark.circle")
+                                    .foregroundColor(self.color(for: user.status))
+                                    .font(.title.weight(.light))
+                            }
+                            .padding(.vertical, 3)
+                            .padding(.horizontal, 16)
                         }
-                        .padding(.vertical, 3)
-                        .padding(.horizontal, 16)
                     }
                 }
-            }
-            .navigationTitle("Usuarios")
-            .task {
-                do {
-                    try await viewModel.fetchUserList()
-                } catch {
-                    print(error)
+                .task {
+                    do {
+                        try await viewModel.fetchUserList()
+                    } catch {
+                        print(error)
+                    }
                 }
+                .scrollContentBackground(.hidden)
             }
+            .background(Color.teal)
         }
     }
     
