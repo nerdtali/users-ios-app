@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct UserProfileFormView: View {
+    @State private var firstName: String = ""
+    @State private var lastName: String = ""
     @State private var username: String = ""
     @State private var email: String = ""
     @State private var nickname: String = ""
@@ -21,6 +23,8 @@ struct UserProfileFormView: View {
     let defaultGender = ["MALE", "FEMALE", "OTHER"]
 
     init(
+        firstName: String = "",
+        lastName: String = "",
         username: String = "",
         email: String = "",
         nickname: String = "",
@@ -29,6 +33,8 @@ struct UserProfileFormView: View {
         gender: String =  "",
         isEditing: Binding<Bool>
     ) {
+        _firstName = State(initialValue: firstName)
+        _lastName = State(initialValue: lastName)
         _username = State(initialValue: username)
         _email = State(initialValue: email)
         _nickname = State(initialValue: nickname)
@@ -41,6 +47,23 @@ struct UserProfileFormView: View {
     var body: some View {
         Form {
             Section(header: Text("Personal Information")) {
+                
+                if isEditing {
+                    LabeledContent("Nombre") {
+                        TextField("FirstName", text: $firstName)
+                            .textContentType(.username)
+                            .autocapitalization(.none)
+                            .multilineTextAlignment(.trailing)
+                    }
+                    
+                    LabeledContent("Apellido") {
+                        TextField("LastName", text: $lastName)
+                            .textContentType(.username)
+                            .autocapitalization(.none)
+                            .multilineTextAlignment(.trailing)
+                    }
+                }
+                
                 LabeledContent("Usuario") {
                     TextField("Username", text: $username)
                         .textContentType(.username)
